@@ -4,24 +4,15 @@ import Routes from "./Routes";
 import renderer from "./helpers/renderer";
 import createStore from "./store";
 
-const app = express();
+const store = createStore();
+const { dispatch } = store;
+const routes = matchRoutes(Routes, "_PATH");
+const promises = routes.map(({ route }) =>
+  route.loadData ? route.loadData(dispatch) : null
+);
 
-const port = process.env.PORT || 3001;
-
-app.use(express.static("dist"));
-
-app.get("*", (req, res) => {
-  const store = createStore();
-  const { dispatch } = store;
-  const routes = matchRoutes(Routes, req.path);
-  const promises = routes.map(({ route }) => (route.loadData ? route.loadData(dispatch) : null));
-  Promise.all(promises).then(() => {
-    const content = renderer(req, store);
-
-    res.send(content);
+Promise.all(promises).then(() => {
+  const content = renderer("_PATH", store).then((data) => {
+    toCrystal(data);
   });
-});
-
-app.listen(port, () => {
-  console.log(`Listening on port: ${port}`);
 });

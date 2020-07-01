@@ -88,6 +88,10 @@ shards:
     git: https://github.com/crystal-lang/crystal-mysql.git
     version: 0.11.2
 
+  nodejs:
+    git: https://github.com/fukaoi/crystal-nodejs.git
+    version: 0.1.3+git.commit.282fde1b96f5a4b0b0f89d5ee8194a7dd1592720
+
   optarg:
     git: https://github.com/amberframework/optarg.git
     version: 0.8.0

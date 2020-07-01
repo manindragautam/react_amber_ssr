@@ -4,21 +4,38 @@ import { StaticRouter } from "react-router";
 import { renderRoutes } from "react-router-config";
 import { Provider } from "react-redux";
 import Routes from "../Routes";
+import fs from "fs";
 
-export default (req, store) => {
+const readFile = (path, opts = "utf8") =>
+  new Promise((resolve, reject) => {
+    fs.readFile(path, opts, (err, data) => {
+      if (err) reject(err);
+      else resolve(data);
+    });
+  });
+
+const generateHtml = async () => {
+  const indexFile = path.resolve("src/views/home/index.html.ecr");
+  const res = await readFile(indexFile);
+  return res;
+};
+
+export default (path, store) => {
   const content = renderToString(
     <Provider store={store}>
-      <StaticRouter location={req.path}>
+      <StaticRouter location={path}>
         <div>{renderRoutes(Routes)}</div>
       </StaticRouter>
-    </Provider>,
+    </Provider>
   );
-  return `
-    <html>
-      <body>
-        <div id="root">${content}</div>
-        <script src="./bundle.js"></script>
-      </body>
-    </html>
-  `;
+
+  const htmlContent = generateHtml(content).then((data) => {
+    data = data.replace(
+      '<div id="root"></div>',
+      `<div id="root">${content}</div>`
+    );
+    return data;
+  });
+
+  return htmlContent;
 };

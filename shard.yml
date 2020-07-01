@@ -33,6 +33,9 @@ dependencies:
     github: amberframework/jasper-helpers
     version: ~> 0.2.5
 
+  nodejs:
+    github: fukaoi/crystal-nodejs
+
   pg:
     github: will/crystal-pg
     version: ~> 0.21.1
