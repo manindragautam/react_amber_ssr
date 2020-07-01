@@ -31,4 +31,4 @@ watch:
     build_commands:
       - yarn install
     run_commands:
-      - yarn watch
+      - yarn build
